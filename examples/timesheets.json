@@ -1,0 +1,31 @@
+{
+   "options": {
+    "default_total_hours": 40
+   },
+   "codes": [
+        {
+            "name": "Foo",
+            "id": "bar",
+            "active": false,
+            "counts_on_40": false
+        },
+        {
+            "name": "Bar",
+            "id": "foo",
+            "active": false,
+            "counts_on_40": true 
+        },
+        {
+            "name": "B33f",
+            "id": "d34d",
+            "active": true,
+            "counts_on_40": false
+        },
+        {
+            "name": "D34D",
+            "id": "b33f",
+            "active": true,
+            "counts_on_40": true
+        }
+   ]
+}

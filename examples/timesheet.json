@@ -1,0 +1,17 @@
+{
+    "version": "2",
+    "dates": {
+        "yyyy-mm-dd": {
+            "jobs": [
+                {"id": "foo", "hours": 5, "description": "howdy"},
+                {"id": "bar", "hours": 3, "description": "devil in the details"}
+            ]
+        },
+        "yyyy-mm-de": {
+            "job": [
+                {"id": "d34d", "hours": 4, "description": "wheezy"},
+                {"id": "b33f", "hours": 4, "description": "wobbly"}
+            ]
+        }
+    }
+}

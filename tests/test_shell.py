@@ -43,8 +43,8 @@ class TestShell(base.TestBase):
     )
     def test_invalid_document_version(self, version_data):
         encoded_version_data = json.dumps(version_data)
-        config_file = tempfile.TemporaryFile()
-        config_file.write(encoded_version_data.encode('utf-8'))
+        config_file = tempfile.TemporaryFile(mode='w+t')
+        config_file.write(encoded_version_data)
         config_file.seek(0, os.SEEK_SET)
 
         with mock.patch(
@@ -61,8 +61,8 @@ class TestShell(base.TestBase):
             'version': '2'
         }
         encoded_version_data = json.dumps(version_data)
-        config_file = tempfile.TemporaryFile()
-        config_file.write(encoded_version_data.encode('utf-8'))
+        config_file = tempfile.TemporaryFile(mode='w+t')
+        config_file.write(encoded_version_data)
         config_file.seek(0, os.SEEK_SET)
 
         with mock.patch(

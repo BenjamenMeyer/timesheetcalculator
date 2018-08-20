@@ -12,7 +12,7 @@ def main():
     argument_parser.add_argument(
         '--time-sheet', '-ts',
         default=None,
-        type=argparse.FileType('r'),
+        type=argparse.FileType('rt'),
         required=True,
         help=(
             'JSON file containing a dictionary of time code ids and '

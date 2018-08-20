@@ -42,12 +42,13 @@ class TestConfig(base.TestBase):
             attr_value,
             getattr(obj, attr_name)
         )
-        
 
     @ddt.data(
         ({'runtime': {}, 'options': {}}, None),
         ({'runtime': {}, 'options': {}}, '/home/foo'),
-        ({'runtime': {}, 'options': {'default_total_hours': 200}}, '/home/bar'),
+        ({'runtime': {}, 'options': {'default_total_hours': 200}},
+         '/home/bar'
+         ),
     )
     @ddt.unpack
     def test_load(self, config_data, user_home_dir):

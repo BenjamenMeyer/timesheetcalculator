@@ -20,7 +20,9 @@ class TestCalculator(base.TestBase):
         super(TestCalculator, self).tearDown()
 
     def test_instantiation(self):
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             mok_config.return_value = self.mock_config
 
             obj = calculator.TimeSheetCalculator()
@@ -28,7 +30,9 @@ class TestCalculator(base.TestBase):
             self.assertEqual(obj.time_data, {})
 
     def test_run(self):
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             with mock.patch(
                 'pytimesheetcalculator.calculator.TimeSheetCalculator.'
                 'apply_timesheet_options'
@@ -42,15 +46,18 @@ class TestCalculator(base.TestBase):
                         'calculate_hours'
                     ):
                         with mock.patch(
-                            'pytimesheetcalculator.calculator.TimeSheetCalculator.'
+                            'pytimesheetcalculator.calculator.'
+                            'TimeSheetCalculator.'
                             'display'
                         ):
                             with mock.patch(
-                                'pytimesheetcalculator.calculator.TimeSheetCalculator.'
+                                'pytimesheetcalculator.calculator.'
+                                'TimeSheetCalculator.'
                                 'display_available_codes'
                             ):
                                 with mock.patch(
-                                    'pytimesheetcalculator.calculator.TimeSheetCalculator.'
+                                    'pytimesheetcalculator.calculator.'
+                                    'TimeSheetCalculator.'
                                     'display_date_summaries'
                                 ):
                                     mok_config.return_value = self.mock_config
@@ -59,14 +66,31 @@ class TestCalculator(base.TestBase):
                                     obj.run({})
 
     @ddt.data(
-        ({'options': {}}, {'active_hours': 168, 'max_length': 0}),
-        ({'options': {'other_option': ''}}, {'active_hours': 168, 'max_length': 0}),
-        ({'options': {'total_hours': 40}}, {'active_hours': 40, 'max_length': 0}),
-        ({'options': {'Total_Hours': 80}}, {'active_hours': 80, 'max_length': 0}),
+        (
+            {},
+            {'active_hours': 168, 'max_length': 0}
+        ),
+        (
+            {'options': {}},
+            {'active_hours': 168, 'max_length': 0}
+        ),
+        (
+            {'options': {'other_option': ''}},
+            {'active_hours': 168, 'max_length': 0}),
+        (
+            {'options': {'total_hours': 40}},
+            {'active_hours': 40, 'max_length': 0}
+        ),
+        (
+            {'options': {'Total_Hours': 80}},
+            {'active_hours': 80, 'max_length': 0}
+        ),
     )
     @ddt.unpack
     def test_apply_timesheet_options(self, json_doc, applied_options):
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             mok_config.return_value = self.mock_config
 
             default_runtime_options = {
@@ -88,14 +112,16 @@ class TestCalculator(base.TestBase):
             )
 
     @ddt.data(
-        ({'dates':{}}, {}),
-        ({'dates':{ "foobar": {'jobs': []}}}, {}),
-        ({'dates':{ "barfoo": {'jobs': [ {'hours': 0 }]}}}, {}),
-        ({'dates':{ "barfoo": {'jobs': [ {'id': 'world', 'hours': 28 }]}}}, {})
+        ({'dates': {}}, {}),
+        ({'dates': {"foobar": {'jobs': []}}}, {}),
+        ({'dates': {"barfoo": {'jobs': [{'hours': 0}]}}}, {}),
+        ({'dates': {"barfoo": {'jobs': [{'id': 'world', 'hours': 28}]}}}, {})
     )
     @ddt.unpack
     def test_detect_active_hours_empty_cases(self, json_doc, applied_options):
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             mok_config.return_value = self.mock_config
             obj = calculator.TimeSheetCalculator()
             obj.detect_active_hours(json_doc)
@@ -105,13 +131,15 @@ class TestCalculator(base.TestBase):
             )
 
     def test_detect_active_hours_noncounting_hours(self):
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             self.mock_config.time_codes = [
                 {
                     "name": "Active but uncounted time",
                     "id": "happy_hour",
                     "active": True,
-                    "counts_on_40":  False
+                    "counts_on_40": False
                 },
                 {
                     "name": "Active and counted",
@@ -155,18 +183,34 @@ class TestCalculator(base.TestBase):
 
     @ddt.data(
         (
-         {'dates': {}},
-         {'total_hours': 0, 'total_percentage': 0.0, 'date_hours': {}, 'job_hours': {}}
+            {'dates': {}},
+            {
+                'total_hours': 0,
+                'total_percentage': 0.0,
+                'date_hours': {},
+                'job_hours': {}
+            }
         ),
         (
-         {'dates': {'freebie': {'jobs': []}}},
-         {'total_hours': 0, 'total_percentage': 0.0, 'date_hours': {
-            'freebie': {'total_hours': 0, 'jobs': []}}, 'job_hours': {}}
+            {'dates': {'freebie': {'jobs': []}}},
+            {
+                'total_hours': 0,
+                'total_percentage': 0.0,
+                'date_hours': {
+                    'freebie': {
+                        'total_hours': 0,
+                        'jobs': []
+                    }
+                },
+                'job_hours': {}
+            }
         )
     )
     @ddt.unpack
     def test_calculate_hours_empty(self, json_doc, expected_time_data):
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             mok_config.return_value = self.mock_config
             obj = calculator.TimeSheetCalculator()
             obj.calculate_hours(json_doc)
@@ -176,7 +220,9 @@ class TestCalculator(base.TestBase):
             )
 
     def test_calculate_hours_multidoc(self):
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             mok_config.return_value = self.mock_config
             json_doc = {
                 'dates': {
@@ -185,7 +231,7 @@ class TestCalculator(base.TestBase):
                     }
                 }
             }
-            expected_time_data =  {
+            expected_time_data = {
                 'total_hours': 0,
                 'total_percentage': 0.0,
                 'date_hours': {
@@ -205,19 +251,31 @@ class TestCalculator(base.TestBase):
                 expected_time_data
             )
 
-
     @ddt.data(
         (
-         {'dates': {'freebie': {'jobs': [
-                {'id': 'foobar'}
-            ]}}},
-         {'total_hours': 0, 'total_percentage': 0.0, 'date_hours': {
-            'freebie': {'total_hours': 0, 'jobs': []}}, 'job_hours': {}}
+            {
+                'dates': {
+                    'freebie': {'jobs': [{'id': 'foobar'}]}
+                }
+            },
+            {
+                'total_hours': 0,
+                'total_percentage': 0.0,
+                'date_hours': {
+                    'freebie': {
+                        'total_hours': 0,
+                        'jobs': []
+                    }
+                },
+                'job_hours': {}
+            }
         )
     )
     @ddt.unpack
     def test_calculate_no_time_code_config(self, json_doc, expected_time_data):
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             mok_config.return_value = self.mock_config
             obj = calculator.TimeSheetCalculator()
             obj.calculate_hours(json_doc)
@@ -228,21 +286,42 @@ class TestCalculator(base.TestBase):
 
     @ddt.data(
         (
-         {'dates': {'foils': {'jobs': [{'id': 'foobar', 'hours': 8, 'description': 'foo'}]}}},
-         {'total_hours': 8, 'total_percentage': 0.0, 'date_hours': {
-            'foils': {'total_hours': 8, 'jobs': [
-                {'id': 'foobar', 'hours': 8, 'description': 'foo'}
-            ]}},
-            'job_hours': {
-                'foobar': {'hours': 8, 'percentage': 0.0}
-            }}
+            {
+                'dates': {
+                    'foils': {
+                        'jobs': [
+                            {'id': 'foobar', 'hours': 8, 'description': 'foo'}
+                        ]
+                    }
+                }
+            },
+            {
+                'total_hours': 8,
+                'total_percentage': 0.0,
+                'date_hours': {
+                    'foils': {
+                        'total_hours': 8,
+                        'jobs': [
+                            {'id': 'foobar', 'hours': 8, 'description': 'foo'}
+                        ]
+                    }
+                },
+                'job_hours': {
+                    'foobar': {
+                        'hours': 8,
+                        'percentage': 0.0
+                    }
+                }
+            }
         )
     )
     @ddt.unpack
     def test_calculate_invalid_timecode_config_for_jobhour_calc(
         self, json_doc, expected_time_data
     ):
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             mok_config.return_value = self.mock_config
 
             with mock.patch(
@@ -262,43 +341,52 @@ class TestCalculator(base.TestBase):
                     obj.time_data,
                     expected_time_data
                 )
+
     @ddt.data(
         (
-         {
-            'dates': {
-                'foils': {
-                    'jobs': [
-                        {'id': 'foobar', 'hours': 8, 'description': 'foo'},
-                        {'id': 'foobar', 'hours': 8, 'description': 'bar'},
-                        {'id': 'd34db33f', 'hours': 8, 'description': 'foobar'}
-                    ]
-                }
-            }
-         },
-         {
-            'total_hours': 16,
-            'total_percentage': 100.0,
-            'date_hours': {
-                'foils': {
-                    'total_hours': 24,
-                    'jobs': [
-                        {'id': 'foobar', 'hours': 8, 'description': 'foo'},
-                        {'id': 'foobar', 'hours': 8, 'description': 'bar'},
-                        {'id': 'd34db33f', 'hours': 8, 'description': 'foobar'}
-                    ]
+            {
+                'dates': {
+                    'foils': {
+                        'jobs': [
+                            {'id': 'foobar', 'hours': 8, 'description': 'foo'},
+                            {'id': 'foobar', 'hours': 8, 'description': 'bar'},
+                            {
+                                'id': 'd34db33f',
+                                'hours': 8,
+                                'description': 'foobar'
+                            }
+                        ]
+                    }
                 }
             },
-            'job_hours': {
-                'd34db33f': {
-                    'hours': 8,
-                    'percentage': 0.0
+            {
+                'total_hours': 16,
+                'total_percentage': 100.0,
+                'date_hours': {
+                    'foils': {
+                        'total_hours': 24,
+                        'jobs': [
+                            {'id': 'foobar', 'hours': 8, 'description': 'foo'},
+                            {'id': 'foobar', 'hours': 8, 'description': 'bar'},
+                            {
+                                'id': 'd34db33f',
+                                'hours': 8,
+                                'description': 'foobar'
+                            }
+                        ]
+                    }
                 },
-                'foobar': {
-                    'hours': 16,
-                    'percentage': 100.0
+                'job_hours': {
+                    'd34db33f': {
+                        'hours': 8,
+                        'percentage': 0.0
+                    },
+                    'foobar': {
+                        'hours': 16,
+                        'percentage': 100.0
+                    }
                 }
             }
-         }
         )
     )
     @ddt.unpack
@@ -321,7 +409,9 @@ class TestCalculator(base.TestBase):
                 "counts_on_40": False
             }
         )
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             mok_config.return_value = self.mock_config
 
             obj = calculator.TimeSheetCalculator()
@@ -351,7 +441,9 @@ class TestCalculator(base.TestBase):
                 "counts_on_40": True
             },
         ]
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             mok_config.return_value = self.mock_config
 
             obj = calculator.TimeSheetCalculator()
@@ -404,7 +496,9 @@ class TestCalculator(base.TestBase):
             }
         ]
 
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             mok_config.return_value = self.mock_config
 
             obj = calculator.TimeSheetCalculator()
@@ -453,7 +547,9 @@ class TestCalculator(base.TestBase):
             }
         ]
 
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             mok_config.return_value = self.mock_config
 
             obj = calculator.TimeSheetCalculator()

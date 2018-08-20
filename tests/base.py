@@ -12,7 +12,7 @@ class MockConfig(object):
                 }
             },
             'options': {},
-            'codes': [] 
+            'codes': []
         }
 
     def set_time_codes(self, time_codes):

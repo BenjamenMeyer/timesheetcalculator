@@ -51,16 +51,20 @@ class TimeSheetCalculator(base.BaseTimeSheetCalculator):
         self.display_date_summaries()
 
     def apply_timesheet_options(self, json_doc):
-        for option_name, option_value in six.iteritems(json_doc['options']):
-            if option_name.lower() == 'total_hours':
-                print(
-                    "*** Adjusting Default Active Hours from {0} to {1}"
-                    .format(
-                        self.config.runtime['options']['active_hours'],
-                        option_value
+        if 'options' in json_doc:
+            for option_name, option_value in six.iteritems(
+                json_doc['options']
+            ):
+                if option_name.lower() == 'total_hours':
+                    print(
+                        "*** Adjusting Default Active Hours from {0} to {1}"
+                        .format(
+                            self.config.runtime['options']['active_hours'],
+                            option_value
+                        )
                     )
-                )
-                self.config.runtime['options']['active_hours'] = option_value
+                    self.config.runtime[
+                        'options']['active_hours'] = option_value
 
     def detect_active_hours(self, json_doc):
         for job_date, data in six.iteritems(json_doc['dates']):
@@ -103,14 +107,28 @@ class TimeSheetCalculator(base.BaseTimeSheetCalculator):
                 job_id = jobs_on_date['id']
                 job_config = self.get_timecode_config(job_id)
                 if job_config is None:
-                    LOG.debug('Date Processing: Job ID {0} has no configuration'.format(job_id))
+                    LOG.debug(
+                        'Date Processing: Job ID {0} has no '
+                        'configuration'.format(
+                            job_id
+                        )
+                    )
                     continue
 
-                LOG.debug('Date Processing: JOB ID {0} - Configuration {1}'.format(job_id, job_config))
+                LOG.debug(
+                    'Date Processing: JOB ID {0} - Configuration {1}'.format(
+                        job_id,
+                        job_config
+                    )
+                )
 
                 hours = jobs_on_date['hours']
                 if job_config['counts_on_40']:
-                    LOG.debug('Date Processing: Adding {0} to job'.format(hours))
+                    LOG.debug(
+                        'Date Processing: Adding {0} to job'.format(
+                            hours
+                        )
+                    )
                     self.time_data['total_hours'] += hours
 
                 self.time_data['date_hours'][job_date]['total_hours'] += hours
@@ -120,7 +138,8 @@ class TimeSheetCalculator(base.BaseTimeSheetCalculator):
 
                 if job_id not in self.time_data['job_hours']:
                     LOG.debug(
-                        'Date Processing: Adding {0} to job_hours with {1} hours'.format(
+                        'Date Processing: Adding {0} to job_hours with '
+                        '{1} hours'.format(
                             job_id,
                             hours
                         )
@@ -131,11 +150,15 @@ class TimeSheetCalculator(base.BaseTimeSheetCalculator):
                     }
                 else:
                     LOG.debug(
-                        'Date Processing: Updating {0} in job_hours with {1} hours from {2} to {3}'.format(
+                        'Date Processing: Updating {0} in job_hours with {1}'
+                        ' hours from {2} to {3}'.format(
                             job_id,
                             hours,
                             self.time_data['job_hours'][job_id]['hours'],
-                            (self.time_data['job_hours'][job_id]['hours'] + hours)
+                            (
+                                self.time_data[
+                                    'job_hours'][job_id]['hours'] + hours
+                            )
                         )
                     )
                     self.time_data['job_hours'][job_id]['hours'] += hours
@@ -145,7 +168,11 @@ class TimeSheetCalculator(base.BaseTimeSheetCalculator):
             # data should be curated and it should be impossible to get
             # an invalid job_id
             LOG.debug('Job Processing: job id: {0}'.format(job_id))
-            LOG.debug('Job Processing: time codes: {0}'.format(self.config.time_codes))
+            LOG.debug(
+                'Job Processing: time codes: {0}'.format(
+                    self.config.time_codes
+                )
+            )
             hours_job_config = self.get_timecode_config(job_id)
             if hours_job_config is None:
                 continue
@@ -165,14 +192,22 @@ class TimeSheetCalculator(base.BaseTimeSheetCalculator):
                     )
                 )
                 LOG.debug(
-                    'Job Processing: Update total percentate from {0} by {1} to {2}'.format(
+                    'Job Processing: Update total percentate from {0} by {1}'
+                    ' to {2}'.format(
                         self.time_data['total_percentage'],
                         job_hours['percentage'],
-                        (self.time_data['total_percentage'] + job_hours['percentage'])
+                        (
+                            self.time_data[
+                                'total_percentage'] + job_hours['percentage']
+                        )
                     )
                 )
                 self.time_data['total_percentage'] += job_hours['percentage']
-                LOG.debug('Job Processing: Time Data - {0}'.format(self.time_data))
+                LOG.debug(
+                    'Job Processing: Time Data - {0}'.format(
+                        self.time_data
+                    )
+                )
 
     def display(self):
         for job_id in sorted(self.time_data['job_hours'].keys()):
@@ -233,7 +268,12 @@ class TimeSheetCalculator(base.BaseTimeSheetCalculator):
 
         for job_id in sorted(all_job_ids):
             job_config = self.get_timecode_config(job_id)
-            LOG.debug('Job ID {0} Configuration: {1}'.format(job_id, job_config))
+            LOG.debug(
+                'Job ID {0} Configuration: {1}'.format(
+                    job_id,
+                    job_config
+                )
+            )
 
             # .. note:: Since all_jobs_ids is built from the source for
             #   get_timecode_config is should be impossible to not get a

@@ -18,18 +18,22 @@ class TestCommonBase(base.TestBase):
 
     @ddt.data(
         [],
-        [ {'name': 'abc' } ],
-        [ {'name': 'cdefg' }, {'name': 'hijklmop'}]
+        [{'name': 'abc'}],
+        [{'name': 'cdefg'}, {'name': 'hijklmop'}]
     )
     def test_initialization(self, time_codes):
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             self.mock_config.set_time_codes(time_codes)
             mok_config.return_value = self.mock_config
 
             instance = calc_base.BaseTimeSheetCalculator()
 
     def test_run_not_implemented(self):
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             mok_config.return_value = self.mock_config
             instance = calc_base.BaseTimeSheetCalculator()
             with self.assertRaises(NotImplementedError):
@@ -37,12 +41,14 @@ class TestCommonBase(base.TestBase):
 
     @ddt.data(
         ([], 0),
-        ([ {'name': 'abc' } ], 3),
-        ([ {'name': 'cdefg' }, {'name': 'hijklmop'}], 8)
+        ([{'name': 'abc'}], 3),
+        ([{'name': 'cdefg'}, {'name': 'hijklmop'}], 8)
     )
     @ddt.unpack
     def test_detect_max_length(self, time_codes, expected_max_length):
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             self.mock_config.set_time_codes(time_codes)
             mok_config.return_value = self.mock_config
 
@@ -59,7 +65,9 @@ class TestCommonBase(base.TestBase):
     )
     @ddt.unpack
     def test_get_timecode_config(self, time_codes, timecode_id, is_none):
-        with mock.patch('pytimesheetcalculator.config.Configuration') as mok_config:
+        with mock.patch(
+            'pytimesheetcalculator.config.Configuration'
+        ) as mok_config:
             self.mock_config.set_time_codes(time_codes)
             mok_config.return_value = self.mock_config
 

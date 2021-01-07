@@ -1,12 +1,6 @@
 language: python
 matrix:
     include:
-        - python: "2.7"
-          env: TEST_SUITE=suite_2_7 TOX_ENV=py27
-        - python: "pypy"
-          env: TEST_SUITE=suite_pypy TOX_ENV=pypy
-        - python: "3.5"
-          env: TEST_SUITE=suite_3_5 TOX_ENV=py35
         - python: "3.6"
           env: TEST_SUITE=suite_3_6 TOX_ENV=py36
         - python: "3.6"

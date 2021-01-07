@@ -1,0 +1,22 @@
+name: Timesheet Calculator CI
+
+on: [ push ]
+
+jobs:
+
+    build: 
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                python-version: [3.6, 3.7, 3.8, 3.9]
+        steps:
+            - uses: actions/checkout@v2
+            - name: Setup Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v2
+              with:
+                python-version: ${{ matrix.python-version }}
+            - name: Install Dependencies 
+              run: pip install tox setuptools virtualenv coveralls --upgrade
+            - name: Run Tox
+              run: tox -v -e py${{ matrix.python-version }} -- -v
+# NOTE: Still need to add coveralls support

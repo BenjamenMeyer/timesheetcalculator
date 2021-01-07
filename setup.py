@@ -2,7 +2,7 @@ import sys
 from setuptools import setup, find_packages
 
 REQUIRES = [
-    'six==1.11.0'
+    'six>=1.11.0'
 ]
 
 setup(

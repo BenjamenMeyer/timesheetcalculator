@@ -1,10 +1,13 @@
 name: Timesheet Calculator CI
 
-on: [ push, pull_request ]
+on:
+    pull_request:
+      paths-ignore:
+            - '.github/*'
 
 jobs:
 
-    lint: 
+    lint:
         runs-on: ubuntu-latest
         strategy:
             fail-fast: true
@@ -19,11 +22,11 @@ jobs:
               uses: actions/setup-python@v2
               with:
                 python-version: 3.8
-            - name: Install Dependencies 
+            - name: Install Dependencies
               run: pip install tox setuptools virtualenv coveralls --upgrade
             - name: Run Tox
               run: tox -v -e pep8 -- -v
-    build: 
+    test:
         runs-on: ubuntu-latest
         strategy:
             fail-fast: true
@@ -34,13 +37,11 @@ jobs:
               with:
                ref: ${{ github.event.pull_request.head.sha }}
               if: ${{ github.event_name }} == 'pull_request'
-            - uses: actions/checkout@v2
-              if: ${{ github.event_name }} != 'pull_request'
             - name: Setup Python ${{ matrix.python-version }}
               uses: actions/setup-python@v2
               with:
                 python-version: ${{ matrix.python-version }}
-            - name: Install Dependencies 
+            - name: Install Dependencies
               run: pip install tox setuptools virtualenv coveralls --upgrade
             - name: Run Tox
               run: tox -v -e py${{ matrix.python-version }} -- -v
